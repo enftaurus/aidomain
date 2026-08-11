@@ -1,0 +1,37 @@
+# Python virtual environments
+venv/
+env/
+.venv/
+ENV/
+
+# Node dependencies
+node_modules/
+.pnpm-store/
+
+# Environment files
+.env
+.env.local
+.env.*.local
+
+# Next.js build output
+.next/
+out/
+build/
+dist/
+
+# SQLite Databases & Generated Reports
+*.db
+*.sqlite
+*.sqlite3
+backend/machsense.db
+generated_reports/
+backend/generated_reports/
+
+# Python Cache
+__pycache__/
+*.py[cod]
+*$py.class
+
+# OS Metadata
+.DS_Store
+Thumbs.db
