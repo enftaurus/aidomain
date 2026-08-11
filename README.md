@@ -6,35 +6,9 @@ MachSense is an engineer-in-the-loop predictive maintenance platform for rotatin
 
 ---
 
-## System Architecture
-
-```text
-SQLite
-  ↓
-FastAPI (Port 8000)
-  ↓
-Frontend API Integration (Next.js - Port 3000)
-  ↓
-Alerts & Threshold Evaluation
-  ↓
-Maintenance Scheduling & Engineer Recommendations
-  ↓
-In-App Notifications & Audit Trail
-  ↓
-LangChain + Groq AI Orchestration
-  ↓
-HTML Report Templates (Engineer & Admin)
-  ↓
-PDF Generation (xhtml2pdf)
-  ↓
-Zoho SMTP Email Delivery
-```
-
----
-
 ## Quick Start
 
-### 1. Launch Environment
+### 1. Launch MachSense Application
 
 Run `./dev.sh` from the repository root:
 
@@ -42,82 +16,23 @@ Run `./dev.sh` from the repository root:
 ./dev.sh
 ```
 
-This script will:
-- Activate the Python virtual environment (`venv`)
-- Detect the frontend package manager (`pnpm` or `npm`)
-- Start **FastAPI** on `http://localhost:8000`
-- Start **Next.js** on `http://localhost:3000`
-- Forward log output from both services cleanly
-- Shut down both background processes gracefully on `Ctrl+C`
+- **FastAPI Backend**: `http://localhost:8000` (API Docs: `http://localhost:8000/docs`)
+- **Next.js Frontend**: `http://localhost:3000`
 
 ---
 
-## API Documentation
-
-Once FastAPI is running, view interactive API documentation at:
-- **Swagger UI**: `http://localhost:8000/docs`
-- **ReDoc**: `http://localhost:8000/redoc`
-
----
-
-## Default Seed Credentials
+## Configured Credentials
 
 | Role | Email | Password |
 |---|---|---|
-| **Admin** | `admin@machsense.demo` | `admin123` |
-| **Engineer** | `engineer@machsense.demo` | `engineer123` |
-| **Engineer** | `sam@machsense.demo` | `engineer123` |
+| **Plant Admin** | `1602-24-733-160@vce.ac.in` | `admin123` |
+| **Lead Engineer** | `1602-24-748-062@vce.ac.in` | `engineer123` |
 
 ---
 
-## Key Features & Endpoints
+## Key Modules & Features
 
-### 1. Auth & Identity
-- `POST /auth/login` — OAuth2 JWT token authentication
-- `GET /auth/me` — Current user profile
-
-### 2. Machinery & Manual Shutdown
-- `GET /machines/` — List all monitored machines
-- `POST /machines/{id}/shutdown` — Human-confirmed shutdown (creates audit log, triggers AI report, sends email)
-- `POST /machines/{id}/start` — Resume machine operation
-
-### 3. Telemetry Pipeline
-- `POST /telemetry/ingest` — Ingest telemetry (source-agnostic: Mock or ESP32)
-- `POST /telemetry/mock/{id}?mode=critical` — Inject mock telemetry for simulation (`normal`, `warning`, `critical`)
-
-### 4. Alerts & Maintenance
-- `GET /alerts/` & `POST /alerts/` — Manage alerts
-- `POST /maintenance/` — Schedule maintenance and notify assigned engineers
-- `POST /recommendations/` — Engineers submit maintenance recommendations to admins
-
-### 5. AI Reports, PDFs, & Email Delivery
-- `GET /reports/` — View generated report history
-- `GET /reports/{id}/download` — Download PDF report
-- Reports are rendered using Jinja2 templates (`engineer_report.html` & `admin_report.html`), converted to PDF via `xhtml2pdf`, and emailed via Zoho SMTP with the PDF attached.
-
-### 6. Audit Trail
-- `GET /audit/` — Immutable audit log of all human decisions and critical system events
-
----
-
-## Configuration (`backend/.env`)
-
-Environment settings can be customized in `backend/.env`:
-
-```env
-DATABASE_URL=sqlite:///./machsense.db
-SECRET_KEY=machsense-dev-secret-key-2026-change-in-production
-CORS_ORIGINS=http://localhost:3000
-
-LLM_PROVIDER=groq
-LLM_MODEL=llama-3.3-70b-versatile
-GROQ_API_KEY=your_groq_api_key
-
-SMTP_HOST=smtp.zoho.in
-SMTP_PORT=587
-SMTP_USER=valyrianminds@zohomail.in
-SMTP_PASSWORD=your_smtp_password
-SMTP_FROM_EMAIL=valyrianminds@zohomail.in
-
-REPORT_OUTPUT_DIR=./generated_reports
-```
+- **ESP32 Wi-Fi Streaming**: Dedicated `/esp32/stream` endpoint for ESP32 time-series hardware data.
+- **Explainable Signal Analytics**: Real-time vibration RMS, Kurtosis, Crest Factor, and RPM monitoring.
+- **Engineer-in-the-Loop Decisions**: Human-controlled manual shutdowns and scheduled maintenance.
+- **AI PDF & Email Reports**: Automated condition report generation powered by LangChain + Groq LLM and dispatched via Zoho SMTP.
